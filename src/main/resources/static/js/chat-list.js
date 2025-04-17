@@ -18,7 +18,16 @@ document.addEventListener("DOMContentLoaded", async () => {
         chatList.innerHTML = "<li>Error loading chats.</li>";
     }
 
-    logoutButton.addEventListener("click", () => {
-        window.location.href = "signin.html";
+    logoutButton.addEventListener("click", async () => {
+        try {
+            const response = await fetch("/api/auth/logout", { method: "POST" });
+            if (response.ok) {
+                window.location.href = "/signin.html"; // Redirect to login page after logout
+            } else {
+                throw new Error("Logout failed!");
+            }
+        } catch (error) {
+            alert("Error logging out: " + error.message);
+        }
     });
 });

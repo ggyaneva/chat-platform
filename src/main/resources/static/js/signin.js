@@ -1,10 +1,12 @@
 document.addEventListener("DOMContentLoaded", async () => {
     try {
-        // Optional: Check if the user is already authenticated
         const response = await fetch("/api/auth/status");
         if (response.ok) {
-            // Redirect authenticated users to the chat list
-            window.location.href = "/chat-list.html";
+            const authStatus = await response.json();
+            if (authStatus.isAuthenticated) {
+                // Redirect authenticated users to the chat list
+                window.location.href = "/chat-list.html";
+            }
         }
     } catch (error) {
         console.error("Error checking authentication status:", error);
@@ -28,7 +30,7 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
         }
 
         alert("Login successful!");
-        window.location.href = "chat-list.html"; // Redirect to chat list
+        window.location.href = "/chat-list.html"; // Redirect to chat list
     } catch (error) {
         alert(error.message);
     }

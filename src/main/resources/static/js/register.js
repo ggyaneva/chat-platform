@@ -15,7 +15,7 @@ document.getElementById("register-form").addEventListener("submit", async (e) =>
         }
 
         alert("Registration successful! Please log in.");
-        window.location.href = "signin.html"; // Redirect to login
+        window.location.href = "/signin.html"; // Redirect to login
     } catch (error) {
         alert(error.message);
     }

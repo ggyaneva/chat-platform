@@ -31,13 +31,11 @@ public class SecurityConfig {
                 .formLogin(form -> form
                         .loginPage("/signin.html") // Custom login page
                         .loginProcessingUrl("/api/auth/login") // Matches the AuthController's login endpoint
-                        .defaultSuccessUrl("/chat-list.html", true)
-                        .failureUrl("/signin.html?error=true")
                         .permitAll()
                 )
                 .logout(logout -> logout
                         .logoutUrl("/api/auth/logout")
-                        .logoutSuccessUrl("/signin.html")
+                        .logoutSuccessUrl("/signin.html") // Redirects to the login page after logout
                         .permitAll()
                 );
         return http.build();
