@@ -22,18 +22,34 @@ public class UserController {
      */
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody User user) {
-        // Validate input
         if (user.getUsername() == null || user.getUsername().isEmpty() ||
                 user.getPassword() == null || user.getPassword().isEmpty()) {
             return ResponseEntity.badRequest().body("Username and password are required.");
         }
 
-        // Register the user
         boolean success = userService.registerUser(user.getUsername(), user.getPassword(), user.getRole());
         if (success) {
             return ResponseEntity.ok("User registered successfully");
         } else {
             return ResponseEntity.status(400).body("Username already exists");
+        }
+    }
+
+    /**
+     * Authenticate user.
+     */
+    @PostMapping("/signin")
+    public ResponseEntity<?> authenticateUser(@RequestBody User user) {
+        if (user.getUsername() == null || user.getUsername().isEmpty() ||
+                user.getPassword() == null || user.getPassword().isEmpty()) {
+            return ResponseEntity.badRequest().body("Username and password are required.");
+        }
+
+        User authenticatedUser = userService.authenticate(user.getUsername(), user.getPassword());
+        if (authenticatedUser != null) {
+            return ResponseEntity.ok("Authentication successful");
+        } else {
+            return ResponseEntity.status(401).body("Invalid username or password");
         }
     }
 }
