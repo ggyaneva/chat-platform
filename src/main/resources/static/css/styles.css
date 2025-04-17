@@ -5,6 +5,7 @@ body {
     padding: 0;
     background-color: #f4f4f9;
     color: #333;
+    line-height: 1.6;
 }
 
 /* Authentication Container */
@@ -14,6 +15,7 @@ body {
     align-items: center;
     height: 100vh;
     background-color: #007bff;
+    padding: 15px; /* Added padding for smaller screens */
 }
 
 .auth-card {
@@ -29,11 +31,14 @@ body {
 .auth-card h2 {
     margin-bottom: 20px;
     color: #007bff;
+    font-size: 1.5rem; /* Improved font size for better readability */
 }
 
-.auth-form input, .auth-form select {
-    width: calc(100% - 20px);
-    margin: 10px auto;
+/* Form Styling */
+.auth-form input,
+.auth-form select {
+    width: 100%;
+    margin: 10px 0; /* Adjusted margin for better spacing */
     padding: 12px;
     font-size: 1rem;
     border: 1px solid #ddd;
@@ -42,9 +47,11 @@ body {
     box-sizing: border-box;
 }
 
-.auth-form input:focus, .auth-form select:focus {
+.auth-form input:focus,
+.auth-form select:focus {
     border-color: #007bff;
     box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+    outline: none; /* Removed default outline for cleaner look */
 }
 
 .auth-form button {
@@ -67,6 +74,7 @@ body {
 .auth-links a {
     color: #007bff;
     text-decoration: none;
+    display: inline-block;
     margin-top: 15px;
 }
 
@@ -74,12 +82,32 @@ body {
     text-decoration: underline;
 }
 
+/* Messages */
 .error-message {
     color: red;
     margin-top: 10px;
+    font-weight: bold; /* Highlight error messages */
 }
 
 .success-message {
     color: green;
     margin-top: 10px;
+    font-weight: bold; /* Highlight success messages */
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .auth-card {
+        padding: 20px; /* Adjusted padding for smaller screens */
+    }
+
+    .auth-card h2 {
+        font-size: 1.25rem; /* Adjusted font size for smaller screens */
+    }
+
+    .auth-form input,
+    .auth-form select,
+    .auth-form button {
+        font-size: 0.95rem; /* Adjusted font size for smaller screens */
+    }
 }

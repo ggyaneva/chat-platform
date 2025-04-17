@@ -33,10 +33,10 @@ public class ChatMessageDAO {
     }
 
     // Insert a new chat message
-    public int save(ChatMessage message) {
+    public boolean save(ChatMessage message) {
         String sql = "INSERT INTO chat_message (sender, content, timestamp, chat_room_id) VALUES (?, ?, ?, ?)";
         return jdbcTemplate.update(sql, message.getSender(), message.getContent(),
-                message.getTimestamp(), message.getChatRoomId());
+                message.getTimestamp(), message.getChatRoomId()) > 0;
     }
 
     // Retrieve messages by chat room ID

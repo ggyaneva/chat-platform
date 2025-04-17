@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.w3.org/1999/xhtml">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -9,21 +9,19 @@
 <body>
 <div class="login-container">
     <h1>Sign In</h1>
-    <form action="/login" method="post">
+    <form action="/login" method="post" aria-label="Login Form">
         <div class="form-group">
             <label for="username">Username:</label>
-            <input type="text" id="username" name="username" required>
+            <input type="text" id="username" name="username" required aria-required="true">
         </div>
         <div class="form-group">
             <label for="password">Password:</label>
-            <input type="password" id="password" name="password" required>
+            <input type="password" id="password" name="password" required aria-required="true">
         </div>
-        <button type="submit">Sign In</button>
+        <button type="submit" aria-label="Sign In">Sign In</button>
     </form>
     <p>Don't have an account? <a href="/register">Register here</a></p>
-
-    <!-- Error Message -->
-    <div class="error-message" style="color: red; margin-top: 1rem;">
+    <div class="error-message" aria-live="assertive" style="color: red; margin-top: 1rem;">
         <p th:if="${error}" th:text="${errorMessage}">Invalid username or password</p>
     </div>
 </div>

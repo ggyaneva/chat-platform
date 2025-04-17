@@ -17,9 +17,13 @@ public class ChatMessageService {
     }
 
     public ChatMessage saveMessage(String sender, String content, Long chatRoomId) {
-        ChatMessage message = new ChatMessage(sender, content, LocalDateTime.now(), chatRoomId);
-        chatMessageDAO.save(message);
-        return message;
+        ChatMessage message = new ChatMessage();
+        message.setSender(sender);
+        message.setContent(content);
+        message.setTimestamp(LocalDateTime.now());
+        message.setChatRoomId(chatRoomId);
+        boolean success = chatMessageDAO.save(message);
+        return success ? message : null;
     }
 
     public List<ChatMessage> getMessagesByChatRoom(Long chatRoomId) {

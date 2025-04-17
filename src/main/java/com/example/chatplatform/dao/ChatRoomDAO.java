@@ -30,9 +30,9 @@ public class ChatRoomDAO {
     }
 
     // Insert a new chat room
-    public int save(ChatRoom chatRoom) {
+    public boolean save(ChatRoom chatRoom) {
         String sql = "INSERT INTO chat_room (name) VALUES (?)";
-        return jdbcTemplate.update(sql, chatRoom.getName());
+        return jdbcTemplate.update(sql, chatRoom.getName()) > 0;
     }
 
     // Retrieve all chat rooms

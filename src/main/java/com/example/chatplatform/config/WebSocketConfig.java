@@ -13,7 +13,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     private final WebSocketController webSocketController;
 
-    @Value("${application.websocket.path}") // Binds the custom property
+    @Value("${application.websocket.path}") // WebSocket endpoint path from properties
     private String webSocketPath;
 
     public WebSocketConfig(WebSocketController webSocketController) {
@@ -22,6 +22,7 @@ public class WebSocketConfig implements WebSocketConfigurer {
 
     @Override
     public void registerWebSocketHandlers(WebSocketHandlerRegistry registry) {
-        registry.addHandler(webSocketController, webSocketPath).setAllowedOrigins("*");
+        // Use specific origins for better security
+        registry.addHandler(webSocketController, webSocketPath).setAllowedOrigins("http://localhost:3000");
     }
 }

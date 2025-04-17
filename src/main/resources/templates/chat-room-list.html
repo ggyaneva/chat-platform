@@ -7,10 +7,13 @@
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-<h2>Chat Rooms</h2>
-<ul id="chat-rooms"></ul>
-<input type="text" id="new-room-name" placeholder="New Room Name">
-<button id="create-room">Create Room</button>
+<main>
+    <h2>Chat Rooms</h2>
+    <ul id="chat-rooms" aria-label="List of Chat Rooms"></ul>
+    <label for="new-room-name">Create a New Room</label>
+    <input type="text" id="new-room-name" placeholder="New Room Name" aria-label="New Room Name">
+    <button id="create-room" aria-label="Create Room">Create Room</button>
+</main>
 <script src="/js/chat-room.js"></script>
 </body>
 </html>

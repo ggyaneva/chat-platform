@@ -16,9 +16,10 @@ public class ChatRoomService {
     }
 
     public ChatRoom createChatRoom(String name) {
-        ChatRoom chatRoom = new ChatRoom(name);
-        chatRoomDAO.save(chatRoom);
-        return chatRoom;
+        ChatRoom chatRoom = new ChatRoom();
+        chatRoom.setName(name);
+        boolean success = chatRoomDAO.save(chatRoom);
+        return success ? chatRoom : null;
     }
 
     public List<ChatRoom> getAllChatRooms() {

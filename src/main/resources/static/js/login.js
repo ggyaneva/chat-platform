@@ -11,7 +11,9 @@ document.getElementById("login-form").addEventListener("submit", async (e) => {
     });
 
     if (response.ok) {
-        const role = username === "admin" ? "ADMIN" : "USER";
+        const result = await response.json();
+        const role = result.role; // Parse role from backend response
+
         // Redirect based on role
         if (role === "ADMIN") {
             window.location.href = "/admin-dashboard";

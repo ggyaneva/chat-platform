@@ -1,16 +1,24 @@
 package com.example.chatplatform.model;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
 @Getter
+@Setter
 public class User {
 
-    // Getters and Setters
     private Long id;
-    private String username;
-    private String password; // Plain password for simplicity; hash in production
-    private String role; // e.g., "ADMIN" or "USER"
 
+    @NotNull
+    @Size(min = 3, max = 50)
+    private String username;
+
+    @NotNull
+    @Size(min = 6)
+    private String password;
+
+    @NotNull
+    private String role;
 }

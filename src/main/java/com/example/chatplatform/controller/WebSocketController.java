@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.annotation.Nullable;
 import lombok.Getter;
 import lombok.Setter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.socket.TextMessage;
 import org.springframework.web.socket.WebSocketSession;
@@ -15,39 +17,46 @@ import java.util.concurrent.CopyOnWriteArrayList;
 @Component
 public class WebSocketController extends TextWebSocketHandler {
 
+    private static final Logger logger = LoggerFactory.getLogger(WebSocketController.class);
+
     private final CopyOnWriteArrayList<WebSocketSession> sessions = new CopyOnWriteArrayList<>();
-    private final ObjectMapper objectMapper = new ObjectMapper(); // For JSON parsing
+    private final ObjectMapper objectMapper = new ObjectMapper();
 
     @Override
     public void afterConnectionEstablished(@Nullable WebSocketSession session) {
-        sessions.add(session);
-        assert session != null;
-        System.out.println("New WebSocket connection established: " + session.getId());
-        sendSystemMessage(session, "Welcome! Your session ID is: " + session.getId());
+        if (session != null) {
+            sessions.add(session);
+            logger.info("New WebSocket connection established: {}", session.getId());
+            sendSystemMessage(session, "Welcome! Your session ID is: " + session.getId());
+        } else {
+            logger.warn("Attempted to establish a null WebSocket session.");
+        }
     }
 
     @Override
     protected void handleTextMessage(WebSocketSession session, TextMessage message) {
         try {
-            System.out.println("Received message from session " + session.getId() + ": " + message.getPayload());
-
-            // Parse the message as JSON
             ChatMessage chatMessage = objectMapper.readValue(message.getPayload(), ChatMessage.class);
-
-            // Broadcast the parsed message
-            broadcastMessage(chatMessage);
-
+            if (validateMessage(chatMessage)) {
+                broadcastMessage(chatMessage);
+            } else {
+                logger.warn("Invalid message format received from session {}: {}", session.getId(), message.getPayload());
+                sendErrorMessage(session, "Invalid message format.");
+            }
         } catch (IOException e) {
-            System.err.println("Error handling message: " + e.getMessage());
-            sendErrorMessage(session);
+            logger.error("Error parsing message from session {}: {}", session.getId(), e.getMessage());
+            sendErrorMessage(session, "Failed to process the message.");
         }
     }
 
     @Override
     public void afterConnectionClosed(@Nullable WebSocketSession session, @Nullable org.springframework.web.socket.CloseStatus status) {
-        sessions.remove(session);
-        assert session != null;
-        System.out.println("WebSocket connection closed: " + session.getId());
+        if (session != null) {
+            sessions.remove(session);
+            logger.info("WebSocket connection closed: {}", session.getId());
+        } else {
+            logger.warn("Attempted to close a null WebSocket session.");
+        }
     }
 
     private void broadcastMessage(ChatMessage chatMessage) {
@@ -59,9 +68,8 @@ public class WebSocketController extends TextWebSocketHandler {
                     session.sendMessage(new TextMessage(messageJson));
                 }
             }
-
         } catch (IOException e) {
-            System.err.println("Error broadcasting message: " + e.getMessage());
+            logger.error("Error broadcasting message: {}", e.getMessage());
         }
     }
 
@@ -70,20 +78,24 @@ public class WebSocketController extends TextWebSocketHandler {
             ChatMessage systemMessage = new ChatMessage("SYSTEM", message);
             session.sendMessage(new TextMessage(objectMapper.writeValueAsString(systemMessage)));
         } catch (IOException e) {
-            System.err.println("Error sending system message: " + e.getMessage());
+            logger.error("Error sending system message to session {}: {}", session.getId(), e.getMessage());
         }
     }
 
-    private void sendErrorMessage(WebSocketSession session) {
+    private void sendErrorMessage(WebSocketSession session, String errorMessage) {
         try {
-            ChatMessage error = new ChatMessage("ERROR", "Invalid message format. Please send valid JSON.");
+            ChatMessage error = new ChatMessage("ERROR", errorMessage);
             session.sendMessage(new TextMessage(objectMapper.writeValueAsString(error)));
         } catch (IOException e) {
-            System.err.println("Error sending error message: " + e.getMessage());
+            logger.error("Error sending error message to session {}: {}", session.getId(), e.getMessage());
         }
     }
 
-    // Inner class to represent chat messages
+    private boolean validateMessage(ChatMessage message) {
+        return message.getSender() != null && !message.getSender().isEmpty()
+                && message.getContent() != null && !message.getContent().isEmpty();
+    }
+
     @Setter
     @Getter
     private static class ChatMessage {
@@ -96,6 +108,5 @@ public class WebSocketController extends TextWebSocketHandler {
             this.sender = sender;
             this.content = content;
         }
-
     }
 }

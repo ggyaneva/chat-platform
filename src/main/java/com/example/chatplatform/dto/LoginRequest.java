@@ -6,19 +6,15 @@ import lombok.Setter;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
-@Setter
 @Getter
-public class UserDTO {
+@Setter
+public class LoginRequest {
 
     @NotNull
     @Size(min = 3, max = 50)
     private String username;
 
     @NotNull
-    private String role;
-
-    public UserDTO(String username, String role) {
-        this.username = username;
-        this.role = role;
-    }
+    @Size(min = 6)
+    private String password;
 }

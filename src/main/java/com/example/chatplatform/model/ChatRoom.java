@@ -1,21 +1,17 @@
 package com.example.chatplatform.model;
 
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import lombok.Getter;
 import lombok.Setter;
 
-@Setter
 @Getter
+@Setter
 public class ChatRoom {
 
-    // Getters and Setters
     private Long id;
+
+    @NotNull
+    @Size(min = 1, max = 100)
     private String name;
-
-    // Constructors
-    public ChatRoom() {}
-
-    public ChatRoom(String name) {
-        this.name = name;
-    }
-
 }

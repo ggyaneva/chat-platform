@@ -1,6 +1,5 @@
 package com.example.chatplatform.controller;
 
-import com.example.chatplatform.dto.UserDTO;
 import com.example.chatplatform.model.User;
 import com.example.chatplatform.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,21 +34,6 @@ public class UserController {
             return ResponseEntity.ok("User registered successfully");
         } else {
             return ResponseEntity.status(400).body("Username already exists");
-        }
-    }
-
-    /**
-     * Fetch a user by their username.
-     */
-    @GetMapping("/{username}")
-    public ResponseEntity<?> getUserByUsername(@PathVariable String username) {
-        User user = userService.getUserByUsername(username);
-        if (user != null) {
-            // Map User to UserDTO
-            UserDTO userDTO = new UserDTO(user.getUsername(), user.getRole());
-            return ResponseEntity.ok(userDTO);
-        } else {
-            return ResponseEntity.status(404).body("User not found");
         }
     }
 }

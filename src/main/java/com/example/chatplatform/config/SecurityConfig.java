@@ -14,9 +14,9 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable) // Updated way to disable CSRF
+                .csrf(AbstractHttpConfigurer::disable) // Disable CSRF protection
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/register", "/css/**", "/js/**").permitAll() // Allow public endpoints
+                        .requestMatchers("/login", "/register", "/css/**", "/js/**").permitAll() // Public endpoints
                         .anyRequest().authenticated() // Protect all other endpoints
                 )
                 .formLogin(form -> form
@@ -34,6 +34,6 @@ public class SecurityConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // Password encoder for secure password storage
+        return new BCryptPasswordEncoder(); // Use BCrypt for secure password storage
     }
 }

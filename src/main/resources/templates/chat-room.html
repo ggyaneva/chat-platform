@@ -7,11 +7,16 @@
     <link rel="stylesheet" href="/css/styles.css">
 </head>
 <body>
-<button onclick="window.history.back()">Back</button>
-<h2 id="room-name"></h2>
-<div id="messages"></div>
-<input type="text" id="message-input" placeholder="Type a message...">
-<button id="send-message">Send</button>
+<header>
+    <button onclick="window.history.back()" aria-label="Go Back">Back</button>
+</header>
+<main>
+    <h2 id="room-name" aria-live="polite">Chat Room</h2>
+    <section id="messages" aria-label="Messages"></section>
+    <label for="message-input">Type a message</label>
+    <input type="text" id="message-input" placeholder="Type a message..." aria-label="Message Input">
+    <button id="send-message" aria-label="Send Message">Send</button>
+</main>
 <script src="/js/websocket.js"></script>
 </body>
 </html>

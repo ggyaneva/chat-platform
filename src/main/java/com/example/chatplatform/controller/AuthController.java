@@ -7,6 +7,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
@@ -36,8 +38,11 @@ public class AuthController {
         session.setAttribute("role", user.getRole());
         session.setAttribute("username", user.getUsername());
 
-        // Respond with success message
-        return ResponseEntity.ok(user.getRole() + " logged in successfully");
+        // Respond with role and success message
+        return ResponseEntity.ok(Map.of(
+                "role", user.getRole(),
+                "message", "Logged in successfully"
+        ));
     }
 
     /**

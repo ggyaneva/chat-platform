@@ -10,19 +10,22 @@
 <div class="auth-container">
     <div class="auth-card">
         <h2>Create Account</h2>
-        <form id="register-form" class="auth-form">
-            <input type="text" id="username" name="username" placeholder="Username" required>
-            <input type="password" id="password" name="password" placeholder="Password" required>
+        <form id="register-form" class="auth-form" aria-label="Registration Form">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username" placeholder="Username" required aria-required="true">
+            <label for="password">Password:</label>
+            <input type="password" id="password" name="password" placeholder="Password" required aria-required="true">
+            <label for="role">Role:</label>
             <select id="role" name="role">
                 <option value="USER">User</option>
             </select>
-            <button type="submit">Register</button>
+            <button type="submit" aria-label="Register">Register</button>
         </form>
         <div class="auth-links">
-            <a href="login.html">Already have an account? Login</a>
+            <a href="/login" aria-label="Go to Login">Already have an account? Login</a>
         </div>
-        <div id="success-message" class="success-message"></div>
-        <div id="error-message" class="error-message"></div>
+        <div id="success-message" class="success-message" aria-live="polite"></div>
+        <div id="error-message" class="error-message" aria-live="assertive"></div>
     </div>
 </div>
 <script src="/js/register.js"></script>
