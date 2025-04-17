@@ -1,113 +1,178 @@
-/* General Styles */
+/* General Body Styling */
 body {
-    font-family: 'Arial', sans-serif;
+    font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
+    box-sizing: border-box;
     background-color: #f4f4f9;
     color: #333;
-    line-height: 1.6;
 }
 
-/* Authentication Container */
-.auth-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    background-color: #007bff;
-    padding: 15px; /* Added padding for smaller screens */
-}
-
-.auth-card {
-    background-color: #fff;
-    padding: 30px;
-    border-radius: 10px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
-    width: 100%;
+/* Form Container Styling (Sign In & Register) */
+.form-container {
+    margin: 50px auto;
+    padding: 20px;
+    width: 90%;
     max-width: 400px;
-    text-align: center;
-}
-
-.auth-card h2 {
-    margin-bottom: 20px;
-    color: #007bff;
-    font-size: 1.5rem; /* Improved font size for better readability */
-}
-
-/* Form Styling */
-.auth-form input,
-.auth-form select {
-    width: 100%;
-    margin: 10px 0; /* Adjusted margin for better spacing */
-    padding: 12px;
-    font-size: 1rem;
     border: 1px solid #ddd;
-    border-radius: 5px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.form-container h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.form-container label {
     display: block;
-    box-sizing: border-box;
+    margin-bottom: 5px;
+    font-weight: bold;
 }
 
-.auth-form input:focus,
-.auth-form select:focus {
-    border-color: #007bff;
-    box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
-    outline: none; /* Removed default outline for cleaner look */
-}
-
-.auth-form button {
+.form-container input {
     width: 100%;
-    padding: 12px;
-    font-size: 1rem;
-    color: white;
-    background-color: #007bff;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    margin-top: 10px;
-    transition: background-color 0.3s ease;
+    margin-bottom: 15px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
 }
 
-.auth-form button:hover {
+.form-container button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007BFF;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.form-container button:hover {
     background-color: #0056b3;
 }
 
-.auth-links a {
-    color: #007bff;
-    text-decoration: none;
-    display: inline-block;
-    margin-top: 15px;
+/* Chat List Styling */
+.chat-list-container {
+    margin: 20px auto;
+    padding: 20px;
+    width: 90%;
+    max-width: 500px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #fff;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
-.auth-links a:hover {
-    text-decoration: underline;
+.chat-list-container header h1 {
+    text-align: center;
+    margin: 0;
+    padding: 10px 0;
+    background-color: #007BFF;
+    color: white;
+    border-radius: 4px;
 }
 
-/* Messages */
-.error-message {
-    color: red;
-    margin-top: 10px;
-    font-weight: bold; /* Highlight error messages */
+.chat-list-container ul {
+    list-style: none;
+    padding: 0;
+    margin: 20px 0;
 }
 
-.success-message {
-    color: green;
-    margin-top: 10px;
-    font-weight: bold; /* Highlight success messages */
+.chat-list-container ul li {
+    padding: 15px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
 }
 
-/* Responsive Design */
-@media (max-width: 768px) {
-    .auth-card {
-        padding: 20px; /* Adjusted padding for smaller screens */
-    }
+.chat-list-container ul li:hover {
+    background-color: #e1e1e9;
+}
 
-    .auth-card h2 {
-        font-size: 1.25rem; /* Adjusted font size for smaller screens */
-    }
+.chat-list-container footer {
+    text-align: center;
+    margin-top: 20px;
+}
 
-    .auth-form input,
-    .auth-form select,
-    .auth-form button {
-        font-size: 0.95rem; /* Adjusted font size for smaller screens */
-    }
+.chat-list-container footer button {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007BFF;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.chat-list-container footer button:hover {
+    background-color: #0056b3;
+}
+
+/* Chat Window Styling */
+.chat-window-container {
+    margin: 20px auto;
+    padding: 20px;
+    width: 90%;
+    max-width: 600px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+}
+
+.chat-window-container header {
+    text-align: center;
+    padding: 10px 0;
+    background-color: #007BFF;
+    color: white;
+    border-radius: 4px;
+}
+
+#messages-container {
+    max-height: 400px;
+    overflow-y: auto;
+    margin: 20px 0;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+
+#messages-container div {
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 4px;
+    background-color: #e1e1e9;
+}
+
+#message-input {
+    width: 80%;
+    padding: 10px;
+    margin-right: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+
+#send-button {
+    width: 15%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #007BFF;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+#send-button:hover {
+    background-color: #0056b3;
 }

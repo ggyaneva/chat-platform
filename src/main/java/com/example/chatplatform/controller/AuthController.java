@@ -1,10 +1,9 @@
 package com.example.chatplatform.controller;
 
-import com.example.chatplatform.model.User;
-import com.example.chatplatform.service.UserService;
-import jakarta.servlet.http.HttpSession;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.example.chatplatform.service.AuthService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
@@ -13,44 +12,32 @@ import java.util.Map;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private final UserService userService;
+    private final AuthService authService;
 
-    @Autowired
-    public AuthController(UserService userService) {
-        this.userService = userService;
+    public AuthController(AuthService authService) {
+        this.authService = authService;
     }
 
-    /**
-     * Login a user by validating their credentials.
-     */
+    @PostMapping("/register")
+    public ResponseEntity<String> register(@RequestBody Map<String, String> user) {
+        String username = user.get("username");
+        String password = user.get("password");
+        authService.register(username, password);
+        return ResponseEntity.ok("User registered successfully");
+    }
+
     @PostMapping("/login")
-    public ResponseEntity<?> login(
-            @RequestParam String username,
-            @RequestParam String password,
-            HttpSession session) {
-        // Authenticate user
-        User user = userService.authenticate(username, password);
-        if (user == null) {
+    public ResponseEntity<String> login(@RequestBody Map<String, String> user) {
+        String username = user.get("username");
+        String password = user.get("password");
+        boolean success = authService.authenticate(username, password);
+
+        if (success) {
+            // Set authentication in the SecurityContext
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            return ResponseEntity.ok("Login successful");
+        } else {
             return ResponseEntity.status(401).body("Invalid credentials");
         }
-
-        // Store user details in session
-        session.setAttribute("role", user.getRole());
-        session.setAttribute("username", user.getUsername());
-
-        // Respond with role and success message
-        return ResponseEntity.ok(Map.of(
-                "role", user.getRole(),
-                "message", "Logged in successfully"
-        ));
-    }
-
-    /**
-     * Logout the current user by invalidating the session.
-     */
-    @PostMapping("/logout")
-    public ResponseEntity<?> logout(HttpSession session) {
-        session.invalidate();
-        return ResponseEntity.ok("Logged out successfully");
     }
 }

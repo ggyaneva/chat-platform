@@ -1,67 +1,42 @@
 package com.example.chatplatform.dao;
 
 import com.example.chatplatform.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.JdbcTemplate;
+import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Repository;
 
-import javax.sql.DataSource;
-import java.sql.*;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.List;
 
 @Repository
 public class UserDAO {
 
-    private final DataSource dataSource;
+    private final JdbcTemplate jdbcTemplate;
 
-    @Autowired
-    public UserDAO(DataSource dataSource) {
-        this.dataSource = dataSource;
+    public UserDAO(JdbcTemplate jdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
     }
 
-    /**
-     * Find a user by their username.
-     */
+    public void addUser(String username, String password) {
+        String sql = "INSERT INTO users (username, password) VALUES (?, ?)";
+        jdbcTemplate.update(sql, username, password);
+    }
+
     public User findByUsername(String username) {
-        String query = "SELECT * FROM users WHERE username = ?";
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(query)) {
-
-            stmt.setString(1, username);
-            try (ResultSet rs = stmt.executeQuery()) {
-                if (rs.next()) {
-                    return mapResultSetToUser(rs);
-                }
-            }
-        } catch (SQLException e) {
-            System.err.println("Error finding user by username: " + e.getMessage());
-        }
-        return null;
+        String sql = "SELECT * FROM users WHERE username = ?";
+        List<User> users = jdbcTemplate.query(sql, new UserRowMapper(), username);
+        return users.isEmpty() ? null : users.get(0);
     }
 
-    /**
-     * Save a new user to the database.
-     */
-    public boolean saveUser(User user) {
-        String query = "INSERT INTO users (username, password, role) VALUES (?, ?, ?)";
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement stmt = connection.prepareStatement(query)) {
-
-            stmt.setString(1, user.getUsername());
-            stmt.setString(2, user.getPassword());
-            stmt.setString(3, user.getRole());
-            stmt.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            System.err.println("Error saving user: " + e.getMessage());
+    private static class UserRowMapper implements RowMapper<User> {
+        @Override
+        public User mapRow(ResultSet rs, int rowNum) throws SQLException {
+            User user = new User();
+            user.setId(rs.getLong("id"));
+            user.setUsername(rs.getString("username"));
+            user.setPassword(rs.getString("password"));
+            return user;
         }
-        return false;
-    }
-
-    private User mapResultSetToUser(ResultSet rs) throws SQLException {
-        User user = new User();
-        user.setId(rs.getLong("id"));
-        user.setUsername(rs.getString("username"));
-        user.setPassword(rs.getString("password"));
-        user.setRole(rs.getString("role"));
-        return user;
     }
 }

@@ -2,6 +2,8 @@ package com.example.chatplatform.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -14,26 +16,40 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .csrf(AbstractHttpConfigurer::disable) // Disable CSRF protection
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/login", "/register", "/css/**", "/js/**").permitAll() // Public endpoints
-                        .anyRequest().authenticated() // Protect all other endpoints
+                        .requestMatchers(
+                                "/signin.html",
+                                "/register.html",
+                                "/api/auth/**",
+                                "/css/**",
+                                "/js/**",
+                                "/images/**"
+                        ).permitAll()
+                        .anyRequest().authenticated()
                 )
                 .formLogin(form -> form
-                        .loginPage("/login") // Custom login page
-                        .defaultSuccessUrl("/home", true) // Redirect after successful login
+                        .loginPage("/signin.html") // Custom login page
+                        .loginProcessingUrl("/api/auth/login") // Matches the AuthController's login endpoint
+                        .defaultSuccessUrl("/chat-list.html", true)
+                        .failureUrl("/signin.html?error=true")
                         .permitAll()
                 )
                 .logout(logout -> logout
-                        .logoutUrl("/logout")
-                        .logoutSuccessUrl("/login?logout")
+                        .logoutUrl("/api/auth/logout")
+                        .logoutSuccessUrl("/signin.html")
                         .permitAll()
                 );
         return http.build();
     }
 
     @Bean
+    public AuthenticationManager authenticationManager(AuthenticationConfiguration configuration) throws Exception {
+        return configuration.getAuthenticationManager();
+    }
+
+    @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(); // Use BCrypt for secure password storage
+        return new BCryptPasswordEncoder();
     }
 }

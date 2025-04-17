@@ -18,7 +18,11 @@ public class ChatRoomDAO {
         this.jdbcTemplate = jdbcTemplate;
     }
 
-    // RowMapper for ChatRoom
+    public List<ChatRoom> getAllChatRooms() {
+        String sql = "SELECT * FROM chat_rooms";
+        return jdbcTemplate.query(sql, new ChatRoomRowMapper());
+    }
+
     private static class ChatRoomRowMapper implements RowMapper<ChatRoom> {
         @Override
         public ChatRoom mapRow(ResultSet rs, int rowNum) throws SQLException {
@@ -27,17 +31,5 @@ public class ChatRoomDAO {
             chatRoom.setName(rs.getString("name"));
             return chatRoom;
         }
-    }
-
-    // Insert a new chat room
-    public boolean save(ChatRoom chatRoom) {
-        String sql = "INSERT INTO chat_room (name) VALUES (?)";
-        return jdbcTemplate.update(sql, chatRoom.getName()) > 0;
-    }
-
-    // Retrieve all chat rooms
-    public List<ChatRoom> findAll() {
-        String sql = "SELECT * FROM chat_room";
-        return jdbcTemplate.query(sql, new ChatRoomRowMapper());
     }
 }

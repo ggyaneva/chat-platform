@@ -1,30 +1,35 @@
-document.getElementById("signin-form").addEventListener("submit", async (e) => {
-    e.preventDefault();
-
-    const username = document.getElementById("signin-username").value;
-    const password = document.getElementById("signin-password").value;
-
-    const errorMessage = document.getElementById("signin-error-message");
-    const successMessage = document.getElementById("signin-success-message");
-
-    // Client-side validation
-    if (!username || !password) {
-        errorMessage.textContent = "Username and password are required.";
-        successMessage.textContent = "";
-        return;
+document.addEventListener("DOMContentLoaded", async () => {
+    try {
+        // Optional: Check if the user is already authenticated
+        const response = await fetch("/api/auth/status");
+        if (response.ok) {
+            // Redirect authenticated users to the chat list
+            window.location.href = "/chat-list.html";
+        }
+    } catch (error) {
+        console.error("Error checking authentication status:", error);
     }
+});
 
-    const response = await fetch("/api/users/signin", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password }),
-    });
+document.getElementById("login-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
 
-    if (response.ok) {
-        successMessage.textContent = "Signed in successfully.";
-        errorMessage.textContent = "";
-    } else {
-        successMessage.textContent = "";
-        errorMessage.textContent = "Invalid username or password.";
+    try {
+        const response = await fetch("/api/auth/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ username, password }),
+        });
+
+        if (!response.ok) {
+            throw new Error("Invalid credentials!");
+        }
+
+        alert("Login successful!");
+        window.location.href = "chat-list.html"; // Redirect to chat list
+    } catch (error) {
+        alert(error.message);
     }
 });
