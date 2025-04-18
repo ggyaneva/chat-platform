@@ -33,7 +33,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                 });
 
                 if (!response.ok) {
-                    throw new Error("Invalid username or password!");
+                    if (response.status === 403) {
+                        throw new Error("Access forbidden. Please check your credentials.");
+                    } else {
+                        throw new Error("An unexpected error occurred.");
+                    }
                 }
 
                 alert("Login successful!");
@@ -66,7 +70,11 @@ document.addEventListener("DOMContentLoaded", async () => {
                 });
 
                 if (!response.ok) {
-                    throw new Error("Registration failed! Please try again.");
+                    if (response.status === 403) {
+                        throw new Error("Access forbidden. Registration is not allowed.");
+                    } else {
+                        throw new Error("An unexpected error occurred during registration.");
+                    }
                 }
 
                 alert("Registration successful! You can now log in.");
